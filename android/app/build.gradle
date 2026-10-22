@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.edencover.jeu'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.edencover.jeu'
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+// Emballe la version V9 locale dans l'APK. Pas de dépendance à GitHub Pages.
+tasks.register('syncEdencoverWeb', Copy) {
+    from(rootProject.projectDir.parentFile) {
+        include 'index.html', 'app.js', 'style.css', 'manifest.webmanifest', 'sw.js'
+        include 'assets/**', 'icons/**'
+    }
+    into layout.projectDirectory.dir('src/main/assets/www')
+}
+tasks.named('preBuild') { dependsOn 'syncEdencoverWeb' }
